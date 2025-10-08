@@ -1,0 +1,105 @@
+<div class="container">
+  <div>
+    <h2>Modifier un Employé :</h2>
+  </div>
+
+  <form>
+    <div hidden class="col-sm-3 col-md-3 col-lg-3">
+      <label>ID Employé</label>
+      <input
+        type="number"
+        [(ngModel)]="currentEmploye.idEmploye"
+        name="idEmploye"
+        class="form-control"
+        readonly
+      />
+    </div>
+
+    <div class="col-sm-4 col-md-4 col-lg-4">
+      <label>Nom</label>
+      <input
+        type="text"
+        [(ngModel)]="currentEmploye.nomEmploye"
+        name="nomEmploye"
+        class="form-control"
+      />
+    </div>
+
+    <div class="col-sm-4 col-md-4 col-lg-4">
+      <label>Prénom</label>
+      <input
+        type="text"
+        [(ngModel)]="currentEmploye.prenomEmploye"
+        name="prenomEmploye"
+        class="form-control"
+      />
+    </div>
+
+    <div class="col-sm-4 col-md-4 col-lg-4">
+      <label>Poste</label>
+      <input
+        type="text"
+        [(ngModel)]="currentEmploye.posteEmploye"
+        name="posteEmploye"
+        class="form-control"
+      />
+    </div>
+
+    <div class="col-sm-3 col-md-3 col-lg-3">
+      <label>Date d’embauche</label>
+      <input
+        type="date"
+        [ngModel]="currentEmploye.dateEmbauche | date: 'yyyy-MM-dd'"
+        (ngModelChange)="currentEmploye.dateEmbauche = $event"
+        name="dateEmbauche"
+        class="form-control"
+      />
+    </div>
+
+    <div class="col-sm-3 col-md-3 col-lg-3">
+      <label>Salaire</label>
+      <input
+        type="number"
+        [(ngModel)]="currentEmploye.salaire"
+        name="salaire"
+        class="form-control"
+      />
+    </div>
+
+    <div class="col-sm-4 col-md-4 col-lg-4">
+      <label>Email</label>
+      <input
+        type="email"
+        [(ngModel)]="currentEmploye.email"
+        name="email"
+        class="form-control"
+      />
+    </div>
+
+    <div class="col-sm-4 col-md-4 col-lg-4">
+      <label>Téléphone</label>
+      <input
+        type="text"
+        [(ngModel)]="currentEmploye.telephone"
+        name="telephone"
+        class="form-control"
+      />
+    </div>
+
+    <div class="col-sm-6 col-md-6 col-lg-6">
+      <label>Adresse</label>
+      <input
+        type="text"
+        [(ngModel)]="currentEmploye.adresse"
+        name="adresse"
+        class="form-control"
+      />
+    </div>
+
+    <div class="mt-3">
+      <button type="submit" (click)="updateEmploye()" class="btn btn-success">
+        Modifier
+      </button>
+    </div>
+  </form>
+</div>

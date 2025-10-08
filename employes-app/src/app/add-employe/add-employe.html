@@ -1,0 +1,56 @@
+<div class="container">
+  <div>
+    <h2>Ajouter un Employé :</h2>
+  </div>
+
+  <form>
+    <div class="col-sm-2 col-md-2 col-lg-2">
+      <label>ID Employé</label>
+      <input type="text" [(ngModel)]="newEmploye.idEmploye" name="idEmploye" class="form-control" />
+    </div>
+
+    <div class="col-sm-4 col-md-4 col-lg-4">
+      <label>Nom</label>
+      <input type="text" [(ngModel)]="newEmploye.nomEmploye" name="nomEmploye" class="form-control" />
+    </div>
+
+    <div class="col-sm-4 col-md-4 col-lg-4">
+      <label>Prénom</label>
+      <input type="text" [(ngModel)]="newEmploye.prenomEmploye" name="prenomEmploye" class="form-control" />
+    </div>
+
+    <div class="col-sm-4 col-md-4 col-lg-4">
+      <label>Poste</label>
+      <input type="text" [(ngModel)]="newEmploye.posteEmploye" name="posteEmploye" class="form-control" />
+    </div>
+
+    <div class="col-sm-4 col-md-4 col-lg-4">
+      <label>Date d’embauche</label>
+      <input type="date" [(ngModel)]="newEmploye.dateEmbauche" name="dateEmbauche" class="form-control" />
+    </div>
+
+    <div class="col-sm-4 col-md-4 col-lg-4">
+      <label>Salaire</label>
+      <input type="number" [(ngModel)]="newEmploye.salaire" name="salaire" class="form-control" />
+    </div>
+
+    <div class="col-sm-4 col-md-4 col-lg-4">
+      <label>Email</label>
+      <input type="email" [(ngModel)]="newEmploye.email" name="email" class="form-control" />
+    </div>
+
+    <div class="col-sm-4 col-md-4 col-lg-4">
+      <label>Téléphone</label>
+      <input type="text" [(ngModel)]="newEmploye.telephone" name="telephone" class="form-control" />
+    </div>
+
+    <div class="col-sm-4 col-md-4 col-lg-4">
+      <label>Adresse</label>
+      <input type="text" [(ngModel)]="newEmploye.adresse" name="adresse" class="form-control" />
+    </div>
+
+    <div class="mt-3">
+      <button type="button" (click)="addEmploye()" class="btn btn-success">Ajouter</button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,48 @@
+<div class="container">
+  <div class="card shadow mb-4">
+    <div class="card-body">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>N°</th>
+            <th>ID</th>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Poste</th>
+            <th>Date d'embauche</th>
+            <th>Salaire</th>
+            <th>Email</th>
+            <th>Téléphone</th>
+            <th>Adresse</th>
+          </tr>
+        </thead>
+
+        @for (employe of employes; track employe.idEmploye;let i = $index;let nbr=$count;let f=
+        $first;let l=$last) {
+        <tbody>
+
+          <tr>
+            <td>{{ i + 1 }}</td>
+            <td>{{ employe.idEmploye }}</td>
+            <td>{{ employe.nomEmploye }}</td>
+            <td>{{ employe.prenomEmploye }}</td>
+            <td>{{ employe.posteEmploye }}</td>
+            <td>{{ employe.dateEmbauche | date : 'dd/MM/yyyy' }}</td>
+            <td>{{ employe.salaire }}</td>
+            <td>{{ employe.email }}</td>
+            <td>{{ employe.telephone }}</td>
+            <td>{{ employe.adresse }}</td>
+            <td><a class="btn btn-danger" (click)="supprimerEmploye(employe)">Supprimer</a></td>
+            <td><a class="btn btn-success" [routerLink]="['/updateEmploye',employe.idEmploye]">Modifier</a></td>
+          </tr>
+           @if(l) {
+          <h4>total d'elements : {{ nbr }}</h4>
+          }
+        </tbody>
+        } @empty {
+        <h1>Aucun poduits trouvé!</h1>
+        }
+      </table>
+    </div>
+  </div>
+</div>
