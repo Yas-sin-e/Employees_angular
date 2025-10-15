@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Employees } from '../model/employees.model';
+import { Categorie } from '../model/categorie.model';
 
 @Injectable({
   providedIn: 'root'
@@ -7,7 +8,18 @@ import { Employees } from '../model/employees.model';
 export class EmpServices {
   employes: Employees[];
   employe !:Employees;
+  categories : Categorie[];
+
   constructor() {
+
+
+    this.categories=[
+      { idCatEmp: 1, nomCatEmp: "Développeur Web",niveau:"Junior"  },
+      { idCatEmp: 2, nomCatEmp: "Chef d'équipe",niveau:"Senior"  },
+      { idCatEmp: 3, nomCatEmp: "Directeur Technique", niveau:"Expert"}
+    ];
+
+
     this.employes = [
       {
         idEmploye: 1,
@@ -18,7 +30,9 @@ export class EmpServices {
         salaire: 1500,
         email: 'ali.bensalah@example.com',
         telephone: '22223333',
-        adresse: 'Tunis'
+        adresse: 'Tunis',
+        categorie:{ idCatEmp: 1, nomCatEmp: "Développeur Web",niveau:"Junior" },
+        showDetails: false
       },
       {
         idEmploye: 2,
@@ -29,7 +43,9 @@ export class EmpServices {
         salaire: 1300,
         email: 'sarra.gharbi@example.com',
         telephone: '55446677',
-        adresse: 'Nabeul'
+        adresse: 'Nabeul',
+        categorie: this.categories[1],
+        showDetails: false
       },
       {
         idEmploye: 3,
@@ -40,7 +56,9 @@ export class EmpServices {
         salaire: 2200,
         email: 'khaled.trabelsi@example.com',
         telephone: '99887766',
-        adresse: 'Sousse'
+        adresse: 'Sousse',
+        categorie:this.categories[2],
+        showDetails: false
       }
 
     ];
@@ -70,5 +88,10 @@ updateEmploye( emp: Employees){
       this.employes.splice(index,0,emp); // insérer le nouvel élément    }
          }
 }
-
+listeCategories():Categorie[] {
+      return this.categories;
+    }
+consulterCategorie(id:number): Categorie{
+      return this.categories.find(cat => cat.idCatEmp  == id)!;
+        }
 }
