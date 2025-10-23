@@ -1,4 +1,19 @@
 <div class="container">
+   <div>
+      <label>Grade</label>
+      <select
+        class="form-control form-control-lg"
+        id="idCat"
+        name="idCat"
+        [(ngModel)]="IdGrade"
+        (change)="onChange()"
+
+      >
+        @for(gra of grades; track gra.idGraEmp) {
+        <option [value]="gra.idGraEmp"> {{ gra.nomGraEmp }} - {{ gra.niveau }} </option>
+        }
+      </select>
+    </div>
   <div class="card shadow mb-4">
     <div class="card-body">
       <h4 class="mb-3 text-center">Liste des Employés</h4>

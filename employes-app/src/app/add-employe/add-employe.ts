@@ -3,31 +3,31 @@ import { FormsModule } from '@angular/forms';
 import { Employees } from '../model/employees.model';
 import { EmpServices } from '../services/emp-services';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Categorie } from '../model/categorie.model';
+import { Grade } from '../model/Grade.model';
 
 @Component({
   selector: 'app-add-employe',
-  imports:  [FormsModule],
+  imports: [FormsModule],
   templateUrl: './add-employe.html',
 })
 export class AddEmploye {
 
-  categories! : Categorie[];
-  newIdCat! : number;
-  newCategorie! : Categorie;
+  grades!: Grade[];
+  newIdGra!: number;
+  newgrades!: Grade;
 
 
   newEmploye = new Employees();
-constructor(private employeService: EmpServices,
-            private router :Router,
-            private activatedRoute: ActivatedRoute
-            ) { }
- ngOnInit() {
-    this.categories = this.employeService.listeCategories();
+  constructor(private employeService: EmpServices,
+    private router: Router,
+    private activatedRoute: ActivatedRoute
+  ) { }
+  ngOnInit() {
+    this.grades = this.employeService.listegrades();
   }
-  addEmploye(){
-    this.newCategorie=this.employeService.consulterCategorie(this.newIdCat);
-    this.newEmploye.categorie=this.newCategorie;
+  addEmploye() {
+    this.newgrades = this.employeService.consulterGrade(this.newIdGra);
+    this.newEmploye.grade = this.newgrades;
     this.employeService.ajouteremp(this.newEmploye);
     this.router.navigate(['employe'])
   }

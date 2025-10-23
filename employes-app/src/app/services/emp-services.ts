@@ -1,22 +1,24 @@
 import { Injectable } from '@angular/core';
 import { Employees } from '../model/employees.model';
-import { Categorie } from '../model/categorie.model';
+import { Grade } from '../model/Grade.model';
+import { Employe } from '../employe/employe';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EmpServices {
   employes: Employees[];
-  employe !:Employees;
-  categories : Categorie[];
+  employe !: Employees;
+  grades: Grade[];
+  EmpRecherche! : Employees[];
 
   constructor() {
 
 
-    this.categories=[
-      { idCatEmp: 1, nomCatEmp: "Développeur Web",niveau:"Junior"  },
-      { idCatEmp: 2, nomCatEmp: "Chef d'équipe",niveau:"Senior"  },
-      { idCatEmp: 3, nomCatEmp: "Directeur Technique", niveau:"Expert"}
+    this.grades = [
+      { idGraEmp: 1, nomGraEmp: "Développeur Web", niveau: "Junior" },
+      { idGraEmp: 2, nomGraEmp: "Chef d'équipe", niveau: "Senior" },
+      { idGraEmp: 3, nomGraEmp: "Directeur Technique", niveau: "Expert" }
     ];
 
 
@@ -31,7 +33,7 @@ export class EmpServices {
         email: 'ali.bensalah@example.com',
         telephone: '22223333',
         adresse: 'Tunis',
-        categorie:{ idCatEmp: 1, nomCatEmp: "Développeur Web",niveau:"Junior" },
+        grade: { idGraEmp: 1, nomGraEmp: "Développeur Web", niveau: "Junior" },
         showDetails: false
       },
       {
@@ -44,7 +46,7 @@ export class EmpServices {
         email: 'sarra.gharbi@example.com',
         telephone: '55446677',
         adresse: 'Nabeul',
-        categorie: this.categories[1],
+        grade: this.grades[1],
         showDetails: false
       },
       {
@@ -57,7 +59,7 @@ export class EmpServices {
         email: 'khaled.trabelsi@example.com',
         telephone: '99887766',
         adresse: 'Sousse',
-        categorie:this.categories[2],
+        grade: this.grades[2],
         showDetails: false
       }
 
@@ -69,29 +71,46 @@ export class EmpServices {
   ajouteremp(emp: Employees) {
     this.employes.push(emp);
   }
-  deleteEmp(emp :Employees){
+  deleteEmp(emp: Employees) {
 
     const index = this.employes.indexOf(emp, 0);
-       if (index > -1) {
-         this.employes.splice(index, 1);
-       }
- }
- consulterEmp(id:number): Employees{
-this.employe =  this.employes.find(p => p.idEmploye == id)!;
-return this.employe;
-}
-updateEmploye( emp: Employees){
+    if (index > -1) {
+      this.employes.splice(index, 1);
+    }
+  }
+  consulterEmp(id: number): Employees {
+    this.employe = this.employes.find(p => p.idEmploye == id)!;
+    return this.employe;
+  }
+  updateEmploye(emp: Employees) {
     //chercher le employer dans le tab employees
-   const index = this.employes.indexOf(emp, 0);
+    const index = this.employes.indexOf(emp, 0);
     if (index > -1) {
       this.employes.splice(index, 1); //supprimer l'ancien éléments
-      this.employes.splice(index,0,emp); // insérer le nouvel élément    }
-         }
-}
-listeCategories():Categorie[] {
-      return this.categories;
+      this.employes.splice(index, 0, emp); // insérer le nouvel élément    }
     }
-consulterCategorie(id:number): Categorie{
-      return this.categories.find(cat => cat.idCatEmp  == id)!;
+  }
+  listegrades(): Grade[] {
+    return this.grades;
+  }
+  consulterGrade(id: number): Grade {
+    return this.grades.find(cat => cat.idGraEmp == id)!;
+  }
+
+  rechercherParGrade(idGra: number): Employees[] {
+    this.EmpRecherche = [];
+    this.employes.forEach((cur, index) => {
+        if(idGra == cur.grade.idGraEmp) {
+            console.log("cur "+cur);
+            this.EmpRecherche.push(cur);
         }
+    });
+
+    return this.EmpRecherche;
+}
+rechercherParNom(nom: string): Employees[] {
+  return this.employes.filter(e =>
+    e.prenomEmploye!.toLowerCase().startsWith(nom.toLowerCase())
+  );
+}
 }

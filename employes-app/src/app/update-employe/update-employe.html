@@ -86,14 +86,15 @@
       <input type="text" [(ngModel)]="currentEmploye.adresse" name="adresse" class="form-control" />
     </div>
     <div>
+      <label>Grade</label>
       <select
         class="form-control form-control-lg"
         id="idCat"
         name="idCat"
         [(ngModel)]="updatedCatId"
       >
-        @for(cat of categories; track cat.idCatEmp) {
-        <option [value]="cat.idCatEmp"> {{ cat.nomCatEmp }} - {{ cat.niveau }} </option>
+        @for(gra of grades; track gra.idGraEmp) {
+        <option [value]="gra.idGraEmp"> {{ gra.nomGraEmp }} - {{ gra.niveau }} </option>
         }
       </select>
     </div>

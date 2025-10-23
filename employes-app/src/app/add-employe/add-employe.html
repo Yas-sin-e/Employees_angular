@@ -70,10 +70,10 @@
     </div>
 
     <div class="col-sm-4 col-md-4 col-lg-4">
-      <label>Categorie</label>
-      <select class="form-control form-control-lg" id="idCat" name="idCat" [(ngModel)]="newIdCat">
-        @for(cat of categories; track cat.idCatEmp){
-          <option [value]="cat.idCatEmp"> {{ cat.nomCatEmp }} </option>
+      <label>grade</label>
+      <select class="form-control form-control-lg" id="idGra" name="idGra" [(ngModel)]="newIdGra">
+        @for(Gra of grades; track Gra.idGraEmp){
+          <option [value]="Gra.idGraEmp"> {{ Gra.nomGraEmp }} </option>
         }
       </select>
     </div>
