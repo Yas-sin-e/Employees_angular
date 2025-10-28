@@ -5,12 +5,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class SearchFilterPipe implements PipeTransform {
 
-  // transform(value: unknown, ...args: unknown[]): unknown {
-  //   return null;
-  // }
   transform(list: any[], filterText: string): any {
 return list ? list.filter(item =>
-item.n.toLowerCase().includes(filterText)) : [];
+item.prenomEmploye?.toLowerCase().startsWith(filterText)) : [];
 }
-
 }

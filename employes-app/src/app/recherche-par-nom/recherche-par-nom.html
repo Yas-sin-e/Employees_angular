@@ -1,17 +1,17 @@
 <div class="container">
-  <!-- <form class="form-inline">
+  <form class="form-inline">
 <div class="form-group mx-sm-3 mb-2 mt-2 ">
 <label>Nom employe en tapant</label>
 <input #nom [(ngModel)]="searchTerm"  name="searchTerm" class="form-control" >
 </div>
-</form> -->
+</form>
 
-  <form class="form-inline">
+  <!-- <form class="form-inline">
         <div class="form-group mx-sm-3 mb-2 mt-2 ">
             <label>Nom employe en tapant</label>
   <input class="form-control"  #searchTerm (keyup)="onKeyUp(searchTerm.value)">
         </div>
-    </form>
+    </form> -->
 
   <!-- <form class="form-inline">
     <div class="form-group mx-sm-3 mb-2 mt-2">
@@ -46,7 +46,7 @@
         </thead>
 
         <tbody>
-          @for (employe of employes ; track employe.idEmploye; let i = $index; let nbr = $count; let
+          @for (employe of employes | searchFilter: searchTerm ; track employe.idEmploye; let i = $index; let nbr = $count; let
           l = $last) {
           <tr>
             <td>{{ i + 1 }}</td>
