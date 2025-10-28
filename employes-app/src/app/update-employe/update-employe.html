@@ -1,106 +1,106 @@
-<div class="container">
-  <div>
-    <h2>Modifier un Employé :</h2>
-  </div>
+<div class="container mt-4">
+  <h2>Modifier un Employé :</h2>
 
-  <form>
-    <div hidden class="col-sm-3 col-md-3 col-lg-3">
+  <form [formGroup]="editForm" (ngSubmit)="updateEmploye()">
+
+    <div hidden>
       <label>ID Employé</label>
-      <input
-        type="number"
-        [(ngModel)]="currentEmploye.idEmploye"
-        name="idEmploye"
-        class="form-control"
-        readonly
-      />
+      <input type="number" formControlName="idEmploye" class="form-control" readonly />
     </div>
 
-    <div class="col-sm-4 col-md-4 col-lg-4">
+    <div class="form-group mt-2">
       <label>Nom</label>
-      <input
-        type="text"
-        [(ngModel)]="currentEmploye.nomEmploye"
-        name="nomEmploye"
-        class="form-control"
-      />
+      <input type="text" formControlName="nomEmploye" class="form-control" />
+      <span *ngIf="editForm.get('nomEmploye')?.hasError('required') && editForm.get('nomEmploye')?.touched" class="text-danger">
+        Nom obligatoire
+      </span>
+      <span *ngIf="editForm.get('nomEmploye')?.hasError('minlength') && editForm.get('nomEmploye')?.touched" class="text-danger">
+        Le nom doit contenir au moins 3 caractères
+      </span>
     </div>
 
-    <div class="col-sm-4 col-md-4 col-lg-4">
+    <div class="form-group mt-2">
       <label>Prénom</label>
-      <input
-        type="text"
-        [(ngModel)]="currentEmploye.prenomEmploye"
-        name="prenomEmploye"
-        class="form-control"
-      />
+      <input type="text" formControlName="prenomEmploye" class="form-control" />
+      <span *ngIf="editForm.get('prenomEmploye')?.hasError('required') && editForm.get('prenomEmploye')?.touched" class="text-danger">
+        Prénom obligatoire
+      </span>
     </div>
 
-    <div class="col-sm-4 col-md-4 col-lg-4">
+    <div class="form-group mt-2">
       <label>Poste</label>
-      <input
-        type="text"
-        [(ngModel)]="currentEmploye.posteEmploye"
-        name="posteEmploye"
-        class="form-control"
-      />
+      <input type="text" formControlName="posteEmploye" class="form-control" />
+      <span *ngIf="editForm.get('posteEmploye')?.hasError('required') && editForm.get('posteEmploye')?.touched" class="text-danger">
+        Poste obligatoire
+      </span>
     </div>
 
-    <div class="col-sm-3 col-md-3 col-lg-3">
+    <div class="form-group mt-2">
       <label>Date d’embauche</label>
-      <input
-        type="date"
-        [ngModel]="currentEmploye.dateEmbauche | date : 'yyyy-MM-dd'"
-        (ngModelChange)="currentEmploye.dateEmbauche = $event"
-        name="dateEmbauche"
-        class="form-control"
-      />
+      <input type="date" formControlName="dateEmbauche" class="form-control" />
+      <span *ngIf="editForm.get('dateEmbauche')?.hasError('required') && editForm.get('dateEmbauche')?.touched" class="text-danger">
+        Date d’embauche obligatoire
+      </span>
     </div>
 
-    <div class="col-sm-3 col-md-3 col-lg-3">
+    <div class="form-group mt-2">
       <label>Salaire</label>
-      <input
-        type="number"
-        [(ngModel)]="currentEmploye.salaire"
-        name="salaire"
-        class="form-control"
-      />
+      <input type="number" formControlName="salaire" class="form-control" />
+      <span *ngIf="editForm.get('salaire')?.hasError('required') && editForm.get('salaire')?.touched" class="text-danger">
+        Salaire obligatoire
+      </span>
+      <span *ngIf="editForm.get('salaire')?.hasError('min') && editForm.get('salaire')?.touched" class="text-danger">
+        Le salaire doit être supérieur à 0
+      </span>
     </div>
 
-    <div class="col-sm-4 col-md-4 col-lg-4">
+    <div class="form-group mt-2">
       <label>Email</label>
-      <input type="email" [(ngModel)]="currentEmploye.email" name="email" class="form-control" />
+      <input type="email" formControlName="email" class="form-control" />
+      <span *ngIf="editForm.get('email')?.hasError('required') && editForm.get('email')?.touched" class="text-danger">
+        Email obligatoire
+      </span>
+      <span *ngIf="editForm.get('email')?.hasError('email') && editForm.get('email')?.touched" class="text-danger">
+        Format de l’email invalide
+      </span>
     </div>
 
-    <div class="col-sm-4 col-md-4 col-lg-4">
+    <div class="form-group mt-2">
       <label>Téléphone</label>
-      <input
-        type="text"
-        [(ngModel)]="currentEmploye.telephone"
-        name="telephone"
-        class="form-control"
-      />
+      <input type="text" formControlName="telephone" class="form-control" />
+      <span *ngIf="editForm.get('telephone')?.hasError('required') && editForm.get('telephone')?.touched" class="text-danger">
+        Téléphone obligatoire
+      </span>
+      <span *ngIf="editForm.get('telephone')?.hasError('pattern') && editForm.get('telephone')?.touched" class="text-danger">
+        Le numéro doit contenir exactement 8 chiffres
+      </span>
     </div>
 
-    <div class="col-sm-6 col-md-6 col-lg-6">
+    <div class="form-group mt-2">
       <label>Adresse</label>
-      <input type="text" [(ngModel)]="currentEmploye.adresse" name="adresse" class="form-control" />
+      <input type="text" formControlName="adresse" class="form-control" />
+      <span *ngIf="editForm.get('adresse')?.hasError('required') && editForm.get('adresse')?.touched" class="text-danger">
+        Adresse obligatoire
+      </span>
     </div>
-    <div>
+
+    <div class="form-group mt-2">
       <label>Grade</label>
-      <select
-        class="form-control form-control-lg"
-        id="idCat"
-        name="idCat"
-        [(ngModel)]="updatedCatId"
-      >
+      <select class="form-control" formControlName="idGra">
+        <option value="">-- Sélectionner un grade --</option>
         @for(gra of grades; track gra.idGraEmp) {
-        <option [value]="gra.idGraEmp"> {{ gra.nomGraEmp }} - {{ gra.niveau }} </option>
+          <option [value]="gra.idGraEmp">{{ gra.nomGraEmp }} - {{ gra.niveau }}</option>
         }
       </select>
+      <span *ngIf="editForm.get('idGra')?.hasError('required') && editForm.get('idGra')?.touched" class="text-danger">
+        Grade obligatoire
+      </span>
     </div>
 
     <div class="mt-3">
-      <button type="submit" (click)="updateEmploye()" class="btn btn-success">Modifier</button>
+      <button type="submit" class="btn btn-success" [disabled]="editForm.invalid">
+        Modifier
+      </button>
     </div>
   </form>
 </div>

@@ -65,6 +65,9 @@ export class EmpServices {
 
     ];
   }
+  idExiste(id: number): boolean {
+    return this.employes.some((e) => e.idEmploye === id);
+  }
   listeemp(): Employees[] {
     return this.employes;
   }

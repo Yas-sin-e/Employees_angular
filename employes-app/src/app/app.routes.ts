@@ -5,6 +5,7 @@ import { UpdateEmploye } from './update-employe/update-employe';
 import { RechercheParGrade } from './recherche-par-grade/recherche-par-grade';
 import { RechercheParNom } from './recherche-par-nom/recherche-par-nom';
 
+
 export const routes: Routes = [
   {path: "employe", component : Employe},
   {path: "add_employe", component :AddEmploye},
