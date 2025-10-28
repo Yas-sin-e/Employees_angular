@@ -3,12 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Employees } from '../model/employees.model';
 import { EmpServices } from '../services/emp-services';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router,  } from '@angular/router';
 import { Grade } from '../model/Grade.model';
 
 @Component({
   selector: 'app-add-employe',
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule,],
   templateUrl: './add-employe.html',
 })
 export class AddEmploye {

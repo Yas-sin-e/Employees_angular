@@ -85,12 +85,10 @@ export class EmpServices {
     this.employe = this.employes.find(p => p.idEmploye == id)!;
     return this.employe;
   }
-  updateEmploye(emp: Employees) {
-    //chercher le employer dans le tab employees
-    const index = this.employes.indexOf(emp, 0);
-    if (index > -1) {
-      this.employes.splice(index, 1); //supprimer l'ancien éléments
-      this.employes.splice(index, 0, emp); // insérer le nouvel élément    }
+  updateEmploye(updatedEmp: Employees) {
+    const index = this.employes.findIndex(emp => emp.idEmploye === updatedEmp.idEmploye);
+    if (index !== -1) {
+      this.employes[index] = updatedEmp; // 🔑 remplacer l'objet existant
     }
   }
   listegrades(): Grade[] {

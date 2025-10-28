@@ -3,11 +3,13 @@
 
   <form [formGroup]="editForm" (ngSubmit)="updateEmploye()">
 
+    <!-- ID Employé (readonly) -->
     <div hidden>
       <label>ID Employé</label>
       <input type="number" formControlName="idEmploye" class="form-control" readonly />
     </div>
 
+    <!-- Nom -->
     <div class="form-group mt-2">
       <label>Nom</label>
       <input type="text" formControlName="nomEmploye" class="form-control" />
@@ -19,6 +21,7 @@
       </span>
     </div>
 
+    <!-- Prénom -->
     <div class="form-group mt-2">
       <label>Prénom</label>
       <input type="text" formControlName="prenomEmploye" class="form-control" />
@@ -27,6 +30,7 @@
       </span>
     </div>
 
+    <!-- Poste -->
     <div class="form-group mt-2">
       <label>Poste</label>
       <input type="text" formControlName="posteEmploye" class="form-control" />
@@ -35,6 +39,7 @@
       </span>
     </div>
 
+    <!-- Date d’embauche -->
     <div class="form-group mt-2">
       <label>Date d’embauche</label>
       <input type="date" formControlName="dateEmbauche" class="form-control" />
@@ -43,6 +48,7 @@
       </span>
     </div>
 
+    <!-- Salaire -->
     <div class="form-group mt-2">
       <label>Salaire</label>
       <input type="number" formControlName="salaire" class="form-control" />
@@ -54,6 +60,7 @@
       </span>
     </div>
 
+    <!-- Email -->
     <div class="form-group mt-2">
       <label>Email</label>
       <input type="email" formControlName="email" class="form-control" />
@@ -65,6 +72,7 @@
       </span>
     </div>
 
+    <!-- Téléphone -->
     <div class="form-group mt-2">
       <label>Téléphone</label>
       <input type="text" formControlName="telephone" class="form-control" />
@@ -76,6 +84,7 @@
       </span>
     </div>
 
+    <!-- Adresse -->
     <div class="form-group mt-2">
       <label>Adresse</label>
       <input type="text" formControlName="adresse" class="form-control" />
@@ -84,23 +93,24 @@
       </span>
     </div>
 
+    <!-- Grade -->
     <div class="form-group mt-2">
       <label>Grade</label>
       <select class="form-control" formControlName="idGra">
         <option value="">-- Sélectionner un grade --</option>
-        @for(gra of grades; track gra.idGraEmp) {
-          <option [value]="gra.idGraEmp">{{ gra.nomGraEmp }} - {{ gra.niveau }}</option>
-        }
+        <option *ngFor="let gra of grades" [value]="gra.idGraEmp">{{ gra.nomGraEmp }} - {{ gra.niveau }}</option>
       </select>
       <span *ngIf="editForm.get('idGra')?.hasError('required') && editForm.get('idGra')?.touched" class="text-danger">
         Grade obligatoire
       </span>
     </div>
 
+    <!-- Bouton -->
     <div class="mt-3">
       <button type="submit" class="btn btn-success" [disabled]="editForm.invalid">
         Modifier
       </button>
     </div>
+
   </form>
 </div>

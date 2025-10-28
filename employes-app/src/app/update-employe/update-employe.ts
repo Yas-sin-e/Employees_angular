@@ -25,12 +25,11 @@ export class UpdateEmploye {
   ) {}
 
   ngOnInit() {
-    // Récupérer l'employé courant
     const id = +this.route.snapshot.params['id'];
-    this.currentEmploye = this.employeService.consulterEmp(id);
+    this.currentEmploye = this.employeService.consulterEmp(id); // récupérer l'employé
     this.grades = this.employeService.listegrades();
 
-    // Créer le formulaire Reactive Form avec validations
+    // Création du formulaire avec validations
     this.editForm = this.fb.group({
       idEmploye: [this.currentEmploye.idEmploye, Validators.required],
       nomEmploye: [this.currentEmploye.nomEmploye, [Validators.required, Validators.minLength(3)]],
@@ -68,7 +67,9 @@ export class UpdateEmploye {
       showDetails: this.currentEmploye.showDetails
     };
 
+    // 🔹 Mettre à jour dans le service correctement
     this.employeService.updateEmploye(updatedEmploye);
+
     this.router.navigate(['employe']);
   }
 }
