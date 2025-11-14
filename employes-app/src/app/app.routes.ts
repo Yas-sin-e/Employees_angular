@@ -7,6 +7,7 @@ import { RechercheParNom } from './recherche-par-nom/recherche-par-nom';
 import { Login } from './login/login';
 import { Forbidden } from './forbidden/forbidden';
 import { employeGuard } from './employe-guard';
+import { ListeGrade } from './liste-grade/liste-grade';
 
 
 export const routes: Routes = [
@@ -18,4 +19,5 @@ export const routes: Routes = [
    {path: "rechercheParNom", component : RechercheParNom},
    {path:  'login', component: Login},
     {path:  'app-forbidden', component: Forbidden},
+     {path: "listeGrade", component :ListeGrade, canActivate:[employeGuard]},
 ];

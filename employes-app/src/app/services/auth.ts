@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 })
 export class Auth {
   users: User[] = [{ "username": "admin", "password": "123", "roles": ['ADMIN'] },
-  { "username": "yassine", "password": "123", "roles": ['USER'] }];
+                  { "username": "yassine", "password": "123", "roles": ['USER'] }];
   public loggedUser!: string;
   public isloggedIn: Boolean = false;
   public roles!: string[];
@@ -31,7 +31,7 @@ export class Auth {
         this.isloggedIn = true;
         this.roles = curUser.roles;
         localStorage.setItem('loggedUser', this.loggedUser);
-        localStorage.setItem('isloggedIn', String(this.isloggedIn));
+        localStorage.setItem('isloggedIn', String(this.isloggedIn));// localStorage ne stocke que des chaines de caracteres
       }
     });
 
@@ -54,6 +54,6 @@ this.roles = curUser.roles;
     isAdmin():Boolean{
     if (!this.roles) //this.roles== undefiened
         return false;
-    return  (this.roles.indexOf('ADMIN') >-1);
+    return  (this.roles.indexOf('ADMIN') >-1);// roles contient 'ADMIN'
   }
 }

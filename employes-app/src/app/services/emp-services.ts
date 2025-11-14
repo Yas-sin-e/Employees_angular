@@ -94,6 +94,18 @@ export class EmpServices {
   listegrades(): Grade[] {
     return this.grades;
   }
+  ajoutergrade(gra: Grade) {
+    this.grades.push(gra);
+  }
+  updateGrade(gra: Grade) {
+    const index = this.grades.findIndex(c => c.idGraEmp === gra.idGraEmp);
+    if (index !== -1) {
+      this.grades[index] = gra;
+    }
+  }
+
+
+
   consulterGrade(id: number): Grade {
     return this.grades.find(cat => cat.idGraEmp == id)!;
   }

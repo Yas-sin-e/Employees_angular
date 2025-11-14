@@ -1,0 +1,20 @@
+<form>
+<div   >
+<label>ID Grade</label>
+<input type="text"  [readonly]="!ajout" [(ngModel)]="grade.idGraEmp" name="idgrade" class="form-control w-25">
+</div>
+<div>
+<label>Nom grade</label>
+<input type="text" [(ngModel)]="grade.nomGraEmp" name="nomgrade" class="form-control"
+placeholder="Entrez un nom de grade...">
+</div>
+<div>
+<label>Niveau</label>
+<input type="text" [(ngModel)]="grade.niveau" name="niveau" class="form-control"
+placeholder="Entrez un niveau...">
+</div>
+<div class="mt-2">
+<button type="submit" [disabled]="!grade.nomGraEmp || !grade.niveau" class="btn btn-success"
+(click)="saveGrade()" >{{ajout ? 'Ajouter' : 'Modifier'}} </button>
+</div>
+</form>
