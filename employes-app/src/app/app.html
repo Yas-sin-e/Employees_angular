@@ -31,14 +31,14 @@
               employees
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              @if(authService.isAdmin()){
               <li><a class="dropdown-item" routerLink="/add_employe">Ajouter</a></li>
-              <li><a class="dropdown-item" href="#">Lister</a></li>
+              }
+              <li><a class="dropdown-item" routerLink="/employe">Lister</a></li>
               <li>
-                <a class="dropdown-item" routerLink="/rechercheParGrade"
-                  >Recherche Par Grade</a
-                >
+                <a class="dropdown-item" routerLink="/rechercheParGrade">Recherche Par Grade</a>
               </li>
-              <li><a class="dropdown-item"  routerLink="/rechercheParNom" >Recherche Par Nom</a></li> 
+              <li><a class="dropdown-item" routerLink="/rechercheParNom">Recherche Par Nom</a></li>
             </ul>
           </li>
         </ul>
@@ -53,11 +53,14 @@
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              [username]
+              [{{authService.loggedUser}}]
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="#">Login</a></li>
-              <li><a class="dropdown-item" href="#">Logout</a></li>
+              @if(!authService.isloggedIn){
+              <li><a class="dropdown-item" routerLink="/login">Login</a></li>
+              }@else{
+                <li><a class="dropdown-item" (click)="onLogout()">Logout</a></li>
+              }
               <li><a class="dropdown-item" href="#">Profile</a></li>
             </ul>
           </li>

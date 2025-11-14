@@ -27,8 +27,10 @@
               <button class="btn btn-info btn-sm me-2" (click)="employe.showDetails = !employe.showDetails">
                 {{ employe.showDetails ? 'Masquer' : 'Plus d\'infos' }}
               </button>
+              @if(authService.isAdmin()){
               <button class="btn btn-success btn-sm me-2" [routerLink]="['/updateEmploye', employe.idEmploye]">Modifier</button>
               <button class="btn btn-danger btn-sm" (click)="supprimerEmploye(employe)">Supprimer</button>
+              }
             </td>
           </tr>
 

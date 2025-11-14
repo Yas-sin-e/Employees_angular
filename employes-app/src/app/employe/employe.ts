@@ -3,6 +3,7 @@ import { Employees } from '../model/employees.model';
 import { DatePipe } from '@angular/common';
 import { EmpServices } from '../services/emp-services';
 import { RouterLink } from '@angular/router';
+import { Auth } from '../services/auth';
 
 @Component({
   selector: 'app-employe',
@@ -11,7 +12,7 @@ import { RouterLink } from '@angular/router';
 })
 export class Employe {
   employes : Employees[]
-  constructor(private employeservice: EmpServices){
+  constructor(private employeservice: EmpServices,public authService :Auth) {
     this.employes = employeservice.listeemp();
 
   }
