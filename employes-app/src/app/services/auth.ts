@@ -6,11 +6,11 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class Auth {
-  users: User[] = [{ "username": "admin", "password": "123", "roles": ['ADMIN'] },
-                  { "username": "yassine", "password": "123", "roles": ['USER'] }];
-  public loggedUser!: string;
-  public isloggedIn: Boolean = false;
-  public roles!: string[];
+  users: User[] = [{ "username": "admin", "password": "123", "roles": ['ADMIN'] },// un tableau d'objets JSON
+  { "username": "yassine", "password": "123", "roles": ['USER'] }];
+  public loggedUser!: string;// le nom de l'utilisateur connecté
+  public isloggedIn: Boolean = false; // c'est true si l'utilisateur est connecté
+  public roles!: string[];// le role soit 'ADMIN' soit 'USER'
 
   constructor(private router: Router) { }
   logout() {
@@ -37,23 +37,23 @@ export class Auth {
 
     return validUser;
   }
-  setLoggedUserFromLocalStorage(login : string) {
+  setLoggedUserFromLocalStorage(login: string) {
     this.loggedUser = login;
     this.isloggedIn = true;
     this.getUserRoles(login);
   }
 
-  getUserRoles(username :string){
+  getUserRoles(username: string) {
     this.users.forEach((curUser) => {
-      if( curUser.username == username ) {
-this.roles = curUser.roles;
-}
-});
+      if (curUser.username == username) {
+        this.roles = curUser.roles;
+      }
+    });
 
   }
-    isAdmin():Boolean{
+  isAdmin(): Boolean {
     if (!this.roles) //this.roles== undefiened
-        return false;
-    return  (this.roles.indexOf('ADMIN') >-1);// roles contient 'ADMIN'
+      return false;
+    return (this.roles.indexOf('ADMIN') > -1);// roles contient 'ADMIN'
   }
 }

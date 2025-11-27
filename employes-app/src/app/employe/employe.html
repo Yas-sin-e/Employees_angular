@@ -10,26 +10,37 @@
             <th>Nom</th>
             <th>Prénom</th>
             <th>Poste</th>
-            <th>grade</th>
+            <th>Grade - Niveau</th>
             <th>Actions</th>
           </tr>
         </thead>
 
         <tbody>
           @for (employe of employes; track employe.idEmploye; let i = $index; let nbr = $count; let l = $last) {
+
           <tr>
             <td>{{ i + 1 }}</td>
             <td>{{ employe.nomEmploye }}</td>
             <td>{{ employe.prenomEmploye }}</td>
             <td>{{ employe.posteEmploye }}</td>
-            <td>{{ employe.grade!.nomGraEmp }} - {{ employe.grade!.niveau }}</td>
+
+            <!-- sécurisation au cas où grade est null -->
+           <td>{{ employe.grade ? (employe.grade.nomGraEmp + ' - ' + employe.grade.niveau) : 'Non défini' }}</td>
+
+
             <td>
               <button class="btn btn-info btn-sm me-2" (click)="employe.showDetails = !employe.showDetails">
                 {{ employe.showDetails ? 'Masquer' : 'Plus d\'infos' }}
               </button>
+
               @if(authService.isAdmin()){
-              <button class="btn btn-success btn-sm me-2" [routerLink]="['/updateEmploye', employe.idEmploye]">Modifier</button>
-              <button class="btn btn-danger btn-sm" (click)="supprimerEmploye(employe)">Supprimer</button>
+              <button class="btn btn-success btn-sm me-2" [routerLink]="['/updateEmploye', employe.idEmploye]">
+                Modifier
+              </button>
+
+              <button class="btn btn-danger btn-sm" (click)="supprimerEmploye(employe)">
+                Supprimer
+              </button>
               }
             </td>
           </tr>
@@ -39,7 +50,7 @@
           <tr class="bg-light">
             <td colspan="6">
               <div class="text-start p-3">
-                <p><strong>Date d'embauche :</strong> {{ employe.dateEmbauche | date: 'dd/MM/yyyy' }}</p>
+                <p><strong>Date d'embauche :</strong> {{ employe.dateEmbauche | date: 'yyyy/MM/dd' }}</p>
                 <p><strong>Salaire :</strong> {{ employe.salaire }} DT</p>
                 <p><strong>Email :</strong> {{ employe.email }}</p>
                 <p><strong>Téléphone :</strong> {{ employe.telephone }}</p>

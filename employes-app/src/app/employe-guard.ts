@@ -7,7 +7,8 @@ export const employeGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
   if (authService.isAdmin()) return true;
   else {
-    router.navigate(['app-forbidden']);
-    return false;
+    
+      router.navigate(['app-forbidden']);
+      return false;
   }
 };

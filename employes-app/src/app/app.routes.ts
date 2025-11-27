@@ -11,10 +11,10 @@ import { ListeGrade } from './liste-grade/liste-grade';
 
 
 export const routes: Routes = [
-  {path: "employe", component : Employe},
+  {path: "employe", component : Employe,},
   {path: "add_employe", component :AddEmploye,canActivate:[employeGuard]},
   {path: "",redirectTo: "employe", pathMatch: "full" },
-  {path: "updateEmploye/:id",  component: UpdateEmploye},
+  {path: "updateEmploye/:id",  component: UpdateEmploye,canActivate:[employeGuard]},
   {path: "rechercheParGrade", component : RechercheParGrade},
    {path: "rechercheParNom", component : RechercheParNom},
    {path:  'login', component: Login},

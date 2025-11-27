@@ -1,44 +1,48 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Employees } from '../model/employees.model';
 import { EmpServices } from '../services/emp-services';
-import { ActivatedRoute, Router,  } from '@angular/router';
+import { Router } from '@angular/router';
 import { Grade } from '../model/Grade.model';
+import { Employees } from '../model/employees.model';
 
 @Component({
   selector: 'app-add-employe',
-  imports: [CommonModule, ReactiveFormsModule,],
   templateUrl: './add-employe.html',
+  imports: [CommonModule, ReactiveFormsModule]
 })
 export class AddEmploye {
+
   empForm!: FormGroup;
-  grades!: Grade[];
-  newEmploye = new Employees();
+  grades: Grade[] = [];
 
   constructor(
-    private formBuilder: FormBuilder,
+    private fb: FormBuilder,
     private employeService: EmpServices,
     private router: Router,
-    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit() {
-    this.grades = this.employeService.listegrades();
 
-    // ✅ Validators complets
-    this.empForm = this.formBuilder.group({
-      idEmploye: ['', [Validators.required]],
-      nomEmploye: ['', [Validators.required, Validators.minLength(3)]], // minLength
+    // Charger la liste des grades depuis l’API
+    this.employeService.listegrades().subscribe({
+      next: (g) => {
+        this.grades = g;
+        console.log("Grades chargés :", g);
+      },
+      error: (err) => console.error("Erreur chargement Grades:", err)
+    });
+
+    // Formulaire réactif
+    this.empForm = this.fb.group({
+      idEmploye: [''],
+      nomEmploye: ['', [Validators.required, Validators.minLength(3)]],
       prenomEmploye: ['', Validators.required],
       posteEmploye: ['', Validators.required],
       dateEmbauche: ['', Validators.required],
       salaire: ['', [Validators.required, Validators.min(1)]],
       email: ['', [Validators.required, Validators.email]],
-      telephone: [
-        '',
-        [Validators.required, Validators.pattern(/^[0-9]{8}$/)], // 8 chiffres
-      ],
+      telephone: ['', [Validators.required, Validators.pattern(/^[0-9]{8}$/)]],
       adresse: ['', Validators.required],
       idGra: ['', Validators.required],
     });
@@ -50,22 +54,36 @@ export class AddEmploye {
       return;
     }
 
-    const formValues = this.empForm.value;
-    this.newEmploye = {
-      idEmploye: formValues.idEmploye,
-      nomEmploye: formValues.nomEmploye,
-      prenomEmploye: formValues.prenomEmploye,
-      posteEmploye: formValues.posteEmploye,
-      dateEmbauche: formValues.dateEmbauche,
-      salaire: formValues.salaire,
-      email: formValues.email,
-      telephone: formValues.telephone,
-      adresse: formValues.adresse,
-      grade: this.employeService.consulterGrade(formValues.idGra),
-      showDetails: false,
+    const form = this.empForm.value;
+
+    // Récupérer l'objet grade complet
+    const selectedGrade = this.grades.find(g => g.idGraEmp == form.idGra);
+
+    if (!selectedGrade) {
+      console.error("Grade introuvable !");
+      return;
+    }
+
+    const newEmployee: Employees = {
+      nomEmploye: form.nomEmploye,
+      prenomEmploye: form.prenomEmploye,
+      posteEmploye: form.posteEmploye,
+      dateEmbauche: form.dateEmbauche,
+      salaire: form.salaire,
+      email: form.email,
+      telephone: form.telephone,
+      adresse: form.adresse,
+      grade: selectedGrade,
+      showDetails: false
     };
 
-    this.employeService.ajouteremp(this.newEmploye);
-    this.router.navigate(['employe']);
+    // Appel API
+    this.employeService.ajouterEmp(newEmployee).subscribe({
+      next: () => {
+        console.log("Employé ajouté !");
+        this.router.navigate(["/employe"]);
+      },
+      error: err => console.log("Erreur API:", err)
+    });
   }
 }

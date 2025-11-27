@@ -1,57 +1,46 @@
-import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';  // <-- ajouter CommonModule
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { EmpServices } from '../services/emp-services';
 import { Employees } from '../model/employees.model';
-import { SearchFilterPipe } from '../search-filter-pipe';
+import { Auth } from '../services/auth';
 
 @Component({
   selector: 'app-recherche-par-nom',
-  imports: [DatePipe, RouterLink, FormsModule, SearchFilterPipe],
+  standalone: true,   // <-- important si composant standalone
+  imports: [CommonModule, FormsModule, RouterLink, DatePipe], // <-- ajouter CommonModule
   templateUrl: './recherche-par-nom.html',
-  styles: ``,
 })
 export class RechercheParNom implements OnInit {
-  employes!: Employees[];
-  nomemp!: string;
-  allEmp!: Employees[];
-  searchTerm!: string;
-  //
-  constructor(private employeservice: EmpServices) {
-      // this.employes=[];
-  }
-  // for  pipe methode:
-  ngOnInit(): void {
-    this.allEmp = this.employeservice.listeemp();
-    this.employes = this.allEmp;
-  }
-// for keyup event
-  // ngOnInit(): void {
-  //   this.allEmp = this.employeservice.listeemp();
-  //   this.employes = this.allEmp;
-  // }
 
-  onKeyUp(filterText: string) {
-    this.employes = this.allEmp.filter((item) =>
-      item.prenomEmploye?.toLowerCase().startsWith(filterText)
+  employes: Employees[] = [];
+  searchTerm: string = '';
+
+  constructor(private employeservice: EmpServices,public authService: Auth) {}
+
+  ngOnInit(): void {
+    // Charger tous les employés depuis le backend
+    this.employeservice.listerEmp().subscribe(data => {
+      this.employes = data;
+    });
+  }
+
+  // Recherche dynamique et simplifiée
+  get filteredEmployes(): Employees[] {
+    if (!this.searchTerm) return this.employes;
+    const term = this.searchTerm.toLowerCase().trim();
+    return this.employes.filter(emp =>
+      (emp.nomEmploye?.toLowerCase().includes(term)) ||
+      (emp.prenomEmploye?.toLowerCase().includes(term))
     );
   }
 
-  rechercherEmp() {
-    if (!this.nomemp || this.nomemp.trim() === '') {
-      this.employes = this.employeservice.listeemp();
-    } else {
-      this.employes = this.employeservice.rechercherParNom(this.nomemp);
-    }
-  }
-
   supprimerEmploye(emp: Employees) {
-    //console.log(emp);
-    let conf = confirm('Etes-vous sûr ?');
-    if (conf) {
-      this.employeservice.deleteEmp(emp);
-      this.employes = this.employeservice.listeemp();
+    if (confirm('Etes-vous sûr ?') && emp.idEmploye) {
+      this.employeservice.supprimerEmp(emp.idEmploye).subscribe(() => {
+        this.employes = this.employes.filter(e => e.idEmploye !== emp.idEmploye);
+      });
     }
   }
 }

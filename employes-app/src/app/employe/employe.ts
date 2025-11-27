@@ -1,29 +1,39 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Employees } from '../model/employees.model';
-import { DatePipe } from '@angular/common';
 import { EmpServices } from '../services/emp-services';
-import { RouterLink } from '@angular/router';
 import { Auth } from '../services/auth';
+import { RouterLink } from '@angular/router';
+import { CommonModule, DatePipe } from '@angular/common';
+import { FormsModule, NgModel, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-employe',
-  imports: [DatePipe,RouterLink],
+  imports: [DatePipe, RouterLink,CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './employe.html',
 })
-export class Employe {
-  employes : Employees[]
-  constructor(private employeservice: EmpServices,public authService :Auth) {
-    this.employes = employeservice.listeemp();
+export class Employe implements OnInit {
+  employes!: Employees[];
 
-  }
-  supprimerEmploye(emp: Employees)
-{
-//console.log(emp);
-let conf = confirm("Etes-vous sûr ?");
-if (conf) {
+  constructor(
+    private employeservice: EmpServices,
+    public authService: Auth
+  ) {}
 
-  this.employeservice.deleteEmp(emp);
-}
-}
+  ngOnInit(): void {
+    this.recharger();
   }
 
+  recharger() {
+    this.employeservice.listerEmp().subscribe(emp => {
+      this.employes = emp;
+    });
+  }
+
+  supprimerEmploye(emp: Employees) {
+    if (confirm("Etes-vous sûr ?") && emp.idEmploye) {
+      this.employeservice.supprimerEmp(emp.idEmploye).subscribe(() => {
+        this.recharger();
+      });
+    }
+  }
+}

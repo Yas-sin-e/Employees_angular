@@ -60,7 +60,7 @@
               @if(!authService.isloggedIn){
               <li><a class="dropdown-item" routerLink="/login">Login</a></li>
               }@else{
-                <li><a class="dropdown-item" (click)="onLogout()">Logout</a></li>
+                <li><a class="dropdown-item" (click)="onLogout()" >Logout</a></li>
               }
               <li><a class="dropdown-item" href="#">Profile</a></li>
             </ul>
