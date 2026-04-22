@@ -18,11 +18,14 @@ export class Login {
   constructor(private authService: Auth, private router: Router) { }
 
   onLoggedin() {
-    let isValidUser: Boolean = this.authService.SignIn(this.user);
-    if (isValidUser)
-      this.router.navigate(['/']);
-    else
-      this.erreur = true;
-  }
-}
-
+    this.authService.login(this.user).subscribe({
+    next: (data) => {
+      let jwToken = data.headers.get('Authorization')!;
+      this.authService.saveToken(jwToken);
+      this.router.navigate(['/']); // Redirige vers la liste des employés
+    },
+    error: (err: any) => {
+      this.erreur = true; // Affiche un message d'erreur dans le HTML
+    }
+  });
+  }}

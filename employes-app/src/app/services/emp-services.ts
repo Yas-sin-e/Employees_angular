@@ -4,6 +4,7 @@ import { Grade } from '../model/Grade.model';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment.development';
+import { Auth } from './auth';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -13,32 +14,34 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class EmpServices {
-  constructor(private http: HttpClient) { }
-
+  constructor(private http: HttpClient, private authService: Auth) { }
+apiURL: string = 'http://localhost:8081/Employees/api/employes';
   // ---------------- EMPLOYES ----------------
 
   listerEmp(): Observable<Employees[]> {
-    return this.http.get<Employees[]>(`${environment.apiURL}`);
+
+    return this.http.get<Employees[]>(this.apiURL + '/all');
   }
 
   consulterEmployee(id: number): Observable<Employees> {
-    return this.http.get<Employees>(`${environment.apiURL}/${id}`);
+    return this.http.get<Employees>(this.apiURL + '/getbyid/' + id);
   }
 
   ajouterEmp(emp: Employees): Observable<Employees> {
-    return this.http.post<Employees>(`${environment.apiURL}`, emp, httpOptions);
+    return this.http.post<Employees>(this.apiURL + '/addemp', emp);
   }
 
   updateEmp(emp: Employees): Observable<Employees> {
-    return this.http.put<Employees>(`${environment.apiURL}`, emp, httpOptions);
+    return this.http.put<Employees>(this.apiURL + "/updateemp", emp);
   }
 
   supprimerEmp(id: number): Observable<void> {
-    return this.http.delete<void>(`${environment.apiURL}/${id}`);
+   return this.http.delete<void>(this.apiURL + "/delemp/" + id);
+
   }
 
   rechercherParGrade(idGra: number): Observable<Employees[]> {
-    return this.http.get<Employees[]>(`${environment.apiURL}/EmployeeGrade/${idGra}`);
+    return this.http.get<Employees[]>(this.apiURL + "/EmployeeGrade/" + idGra);
   }
 
   // ----------------- GRADES -----------------

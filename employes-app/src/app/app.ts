@@ -14,14 +14,11 @@ export class App implements  OnInit {
   onLogout(){
   this.authService.logout();
   }
-ngOnInit () {
-  let isloggedin: string;
-  let loggedUser:string;
-  isloggedin = localStorage.getItem('isloggedIn') !;
-  loggedUser = localStorage.getItem('loggedUser') !;
-  if (isloggedin=="false" || !loggedUser)
-    this.router.navigate(['/login']);
-  else
-   this.authService.setLoggedUserFromLocalStorage(loggedUser);
+
+  ngOnInit () {
+this.authService.loadToken();
+if (this.authService.getToken()==null ||
+this.authService.isTokenExpired())
+this.router.navigate(['/login']);
 }
 }
