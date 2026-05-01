@@ -99,7 +99,7 @@
         }
       </div>
 
-<!-- Status des fichiers sélectionnés -->
+      <!-- Status des fichiers sélectionnés -->
       <div class="file-chooser-wrapper">
         <span class="file-status">
           @if (uploadedImages.length > 0) {
@@ -109,8 +109,9 @@
           }
         </span>
       </div>
+      <!-- Hidden file input - triggers only when triggerFileInput() is called -->
       <input id="imageInput" type="file" multiple accept="image/*" (change)="onImageUpload($event)"
-        class="file-input-hidden">
+        style="display: none;">
 
       <!-- Bouton pour OUVRIR le sélecteur de fichiers -->
       <button type="button" (click)="triggerFileInput()" class="btn btn-primary mt-2">
