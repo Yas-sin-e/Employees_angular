@@ -1,11 +1,12 @@
 <div class="container mt-5">
   <div class="row justify-content-md-center">
     <div class="col-md-4">
-      @if(erreur){
-            <div  class="alert alert-danger" >
-                <strong>login ou mot de passe erronés..</strong>
-            </div>
-          }
+     @if (erreur === 1) {
+  <div class="alert alert-danger">
+    <strong>{{ message }}</strong>
+  </div>
+}
+
       <form>
         <div class="form-group">
           <label>Nom Utilisateur :</label>
@@ -15,6 +16,7 @@
           <label>Mot de passe :</label>
           <input type="password" name="password" [(ngModel)]="user.password" class="form-control" />
         </div>
+        <p>Vous n'avez pas un compte? <a routerLink="/register" mb-4 >S'inscrire </a></p>
         <div class="row justify-content-md-center">
           <button type="button" (click)="onLoggedin()" class="btn btn-lg btn-primary mt-3">
             Connexion

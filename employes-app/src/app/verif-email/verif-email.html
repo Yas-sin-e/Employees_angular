@@ -1,0 +1,29 @@
+<!-- src/app/verif-email/verif-email.component.html -->
+<div class="container mt-5">
+  <div class="row justify-content-md-center">
+    <div class="col-md-4">
+
+      <h3 class="mb-4">Validation de l'email</h3>
+
+      @if (err) {
+        <div class="alert alert-danger">
+          <strong>{{ err }}</strong>
+        </div>
+      }
+
+      <form>
+        <div class="form-group mb-3">
+          <label>Veuillez entrer le code envoyé par mail :</label>
+          <input type="text" name="code" [(ngModel)]="code"
+            class="form-control" placeholder="Code de confirmation">
+        </div>
+
+        <button type="button" class="btn btn-success"
+          (click)="onValidateEmail()">
+          Valider
+        </button>
+      </form>
+
+    </div>
+  </div>
+</div>

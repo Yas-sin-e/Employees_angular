@@ -1,4 +1,5 @@
 import { Grade } from "./Grade.model";
+import { Image } from "./image.model";
 
 export class Employees {
   idEmploye?: number;
@@ -12,4 +13,8 @@ export class Employees {
   adresse?: string;
   grade!: Grade;
   showDetails!: boolean;
+  image?: Image;
+  imageStr?: string;
+  images?: Image[];
+  imagePath?: string;
 }

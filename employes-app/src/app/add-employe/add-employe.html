@@ -3,7 +3,7 @@
 
   <form [formGroup]="empForm" (ngSubmit)="addEmploye()">
 
-   <div hidden>
+    <div hidden>
       <label>ID Employé</label>
       <input type="number" formControlName="idEmploye" class="form-control" readonly />
     </div>
@@ -12,10 +12,12 @@
     <div class="form-group mt-2">
       <label>Nom</label>
       <input type="text" formControlName="nomEmploye" class="form-control" />
-      <span *ngIf="empForm.get('nomEmploye')?.hasError('required') && empForm.get('nomEmploye')?.touched" class="text-danger">
+      <span *ngIf="empForm.get('nomEmploye')?.hasError('required') && empForm.get('nomEmploye')?.touched"
+        class="text-danger">
         Nom obligatoire
       </span>
-      <span *ngIf="empForm.get('nomEmploye')?.hasError('minlength') && empForm.get('nomEmploye')?.touched" class="text-danger">
+      <span *ngIf="empForm.get('nomEmploye')?.hasError('minlength') && empForm.get('nomEmploye')?.touched"
+        class="text-danger">
         Le nom doit contenir au moins 3 caractères
       </span>
     </div>
@@ -24,7 +26,8 @@
     <div class="form-group mt-2">
       <label>Prénom</label>
       <input type="text" formControlName="prenomEmploye" class="form-control" />
-      <span *ngIf="empForm.get('prenomEmploye')?.hasError('required') && empForm.get('prenomEmploye')?.touched" class="text-danger">
+      <span *ngIf="empForm.get('prenomEmploye')?.hasError('required') && empForm.get('prenomEmploye')?.touched"
+        class="text-danger">
         Prénom obligatoire
       </span>
     </div>
@@ -33,7 +36,8 @@
     <div class="form-group mt-2">
       <label>Poste</label>
       <input type="text" formControlName="posteEmploye" class="form-control" />
-      <span *ngIf="empForm.get('posteEmploye')?.hasError('required') && empForm.get('posteEmploye')?.touched" class="text-danger">
+      <span *ngIf="empForm.get('posteEmploye')?.hasError('required') && empForm.get('posteEmploye')?.touched"
+        class="text-danger">
         Poste obligatoire
       </span>
     </div>
@@ -42,7 +46,8 @@
     <div class="form-group mt-2">
       <label>Date d'embauche</label>
       <input type="date" formControlName="dateEmbauche" class="form-control" />
-      <span *ngIf="empForm.get('dateEmbauche')?.hasError('required') && empForm.get('dateEmbauche')?.touched" class="text-danger">
+      <span *ngIf="empForm.get('dateEmbauche')?.hasError('required') && empForm.get('dateEmbauche')?.touched"
+        class="text-danger">
         Date d'embauche obligatoire
       </span>
     </div>
@@ -67,7 +72,7 @@
         Email obligatoire
       </span>
       <span *ngIf="empForm.get('email')?.hasError('email') && empForm.get('email')?.touched" class="text-danger">
-        Format de l’email invalide
+        Format de l'email invalide
       </span>
     </div>
 
@@ -75,10 +80,12 @@
     <div class="form-group mt-2">
       <label>Téléphone</label>
       <input type="text" formControlName="telephone" class="form-control" />
-      <span *ngIf="empForm.get('telephone')?.hasError('required') && empForm.get('telephone')?.touched" class="text-danger">
+      <span *ngIf="empForm.get('telephone')?.hasError('required') && empForm.get('telephone')?.touched"
+        class="text-danger">
         Téléphone obligatoire
       </span>
-      <span *ngIf="empForm.get('telephone')?.hasError('pattern') && empForm.get('telephone')?.touched" class="text-danger">
+      <span *ngIf="empForm.get('telephone')?.hasError('pattern') && empForm.get('telephone')?.touched"
+        class="text-danger">
         Le numéro doit contenir exactement 8 chiffres
       </span>
     </div>
@@ -91,6 +98,7 @@
         Adresse obligatoire
       </span>
     </div>
+
 
     <!-- Grade -->
     <div class="form-group mt-2">
@@ -105,6 +113,59 @@
         Grade obligatoire
       </span>
     </div>
+
+    <!-- ← Image Management Section -->
+    <div class="form-group image-section">
+      <label><strong>Image :</strong></label>
+
+      <!-- Large Image Preview Area -->
+      <div class="image-preview-area">
+        @if (imagePreviews.length > 0) {
+        <img [src]="imagePreviews[0]" alt="Aperçu image" class="preview-image">
+        } @else {
+        <div class="empty-preview">Aucune image sélectionnée</div>
+        }
+      </div>
+
+      <!-- File Chooser -->
+      <div class="file-chooser-wrapper">
+        <label for="imagesInput" class="file-chooser-label">Choisir un fichier</label>
+        <span class="file-status">
+          @if (uploadedImages.length > 0) {
+          {{ uploadedImages[uploadedImages.length - 1].name }}
+          } @else {
+          Aucun fichier choisi
+          }
+        </span>
+      </div>
+      <input id="imagesInput" type="file" multiple accept="image/*" (change)="onImageUpload($event)"
+        class="file-input-hidden">
+
+      <!-- Add Image Button -->
+      <button type="button" (click)="triggerFileInput()" class="btn btn-add-image">
+        Ajouter Image
+      </button>
+
+      <!-- Images Gallery -->
+      @if (uploadedImages.length > 0) {
+      <div class="images-section">
+        <h5 class="images-title">Images</h5>
+        <div class="images-gallery-card">
+          <div class="gallery-content">
+            @for (img of imagePreviews; track $index) {
+            <div class="image-thumb-wrapper">
+              <img [src]="img" alt="Image {{ $index + 1 }}" class="image-thumb">
+              <button type="button" (click)="removeImage($index)" class="btn btn-delete-image">
+                Supprimer
+              </button>
+            </div>
+            }
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+
     <button type="submit" class="btn btn-success mt-3" [disabled]="empForm.invalid">Ajouter</button>
   </form>
 </div>

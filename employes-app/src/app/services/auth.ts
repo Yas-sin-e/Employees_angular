@@ -14,7 +14,7 @@ export class Auth {
   apiUserURL: string = 'http://localhost:8082/users';
   token!: string | null;
   private helper = new JwtHelperService();
-
+  public registeredUser: User = new User();
   public loggedUser!: string;// le nom de l'utilisateur connecté
   public isloggedIn: Boolean = false; // c'est true si l'utilisateur est connecté
   public roles!: string[];// le role soit 'ADMIN' soit 'USER'
@@ -25,11 +25,12 @@ export class Auth {
   }
 
   saveToken(jwt: string) {
-    localStorage.setItem('jwt', jwt);
-    this.token = jwt;
+    const token = jwt.startsWith('Bearer ') ? jwt.substring(7) : jwt;
+    localStorage.setItem('jwt', token);  // ← stocke seulement "eyJxxx..."
+    this.token = token;
     this.isloggedIn = true;
     this.decodeJWT();
-  }
+}
   decodeJWT() {
     if (this.token == undefined) return;
     const decodedToken = this.helper.decodeToken(this.token);
@@ -38,8 +39,11 @@ export class Auth {
   }
   loadToken() {
     this.token = localStorage.getItem('jwt');
-    this.decodeJWT();
-  }
+    if (this.token) {
+        this.isloggedIn = true; // ← AJOUTER cette ligne !
+        this.decodeJWT();
+    }
+}
   logout() {
     this.loggedUser = undefined!;
     this.roles = undefined!;
@@ -48,7 +52,18 @@ export class Auth {
     localStorage.removeItem('jwt');
     this.router.navigate(['/login']);
   }
-
+  registerUser(user: User) {
+  return this.http.post<User>(this.apiUserURL + '/register', user, { observe: 'response' });
+}
+setRegisteredUser(user: User) {
+  this.registeredUser = user;
+}
+getRegisteredUser(): User {
+  return this.registeredUser;
+}
+validateEmail(code: string) {
+  return this.http.get<User>(this.apiUserURL + '/verifyEmail/' + code);
+}
   getToken():string | null {
     return this.token;
   }
