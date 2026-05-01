@@ -204,7 +204,12 @@ export class UpdateEmploye implements OnInit {
   }
 
   // Ajouter une seule image (bouton "Ajouter Image")
-  onAddImageEmploye() {
+  onAddImageEmploye(event?: Event) {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
     if (this.uploadedImages.length === 0) {
       console.log("Aucune image sélectionnée");
       return;
