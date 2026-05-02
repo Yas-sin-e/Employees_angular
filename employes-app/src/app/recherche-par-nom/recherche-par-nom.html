@@ -35,8 +35,8 @@
               <td>{{ employe.posteEmploye }}</td>
               <td>{{ employe.grade.nomGraEmp }} - {{ employe.grade.niveau }}</td>
               <td>
-                @if (employe.imageStr) {
-                <img [src]="employe.imageStr"
+                @if (employe.imagePath) {
+                <img [src]="apiURL+'/image/loadfromFS/'+employe.idEmploye"
                   style="height: 60px; width: 80px; object-fit: contain; background-color: #f5f5f5;" class="rounded"
                   alt="Photo">
                 } @else {

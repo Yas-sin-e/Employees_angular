@@ -27,8 +27,8 @@
             <td>{{ employe.grade ? (employe.grade.nomGraEmp + ' - ' + employe.grade.niveau) : 'Non défini' }}</td>
 
             <td>
-              @if (employe.imageStr) {
-              <img [src]="employe.imageStr"
+              @if (employe.imagePath) {
+              <img [src]="apiURL+'/image/loadfromFS/'+employe.idEmploye"
                 style="height: 90px; width: 120px; object-fit: contain; background-color: #f5f5f5;" class="rounded"
                 alt="Photo de {{ employe.prenomEmploye }} {{ employe.nomEmploye }}">
               } @else {
@@ -62,7 +62,6 @@
                 <p><strong>Téléphone :</strong> {{ employe.telephone }}</p>
                 <p><strong>Adresse :</strong> {{ employe.adresse }}</p>
 
-                <!-- Afficher toutes les images de l'employé -->
                 @if (employe.images && employe.images.length > 0) {
                 <div class="mt-3">
                   <p><strong>Images :</strong></p>

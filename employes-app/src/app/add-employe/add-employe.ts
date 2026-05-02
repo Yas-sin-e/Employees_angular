@@ -5,8 +5,6 @@ import { EmpServices } from '../services/emp-services';
 import { Router } from '@angular/router';
 import { Grade } from '../model/Grade.model';
 import { Employees } from '../model/employees.model';
-import { Image } from '../model/image.model';
-import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-add-employe',
@@ -19,8 +17,8 @@ export class AddEmploye implements OnInit {
 
   empForm!: FormGroup;
   grades: Grade[] = [];
-  uploadedImages: File[] = [];
-  imagePreviews: string[] = [];
+  currentPreview: string | null = null;
+  currentFile: File | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -30,11 +28,8 @@ export class AddEmploye implements OnInit {
 
   ngOnInit() {
     this.employeService.listegrades().subscribe({
-      next: (g) => {
-        this.grades = g;
-        console.log("Grades chargés :", g);
-      },
-      error: (err) => console.error("Erreur chargement Grades:", err)
+      next: (g) => { this.grades = g; },
+      error: (err) => console.error('Erreur chargement Grades:', err)
     });
 
     this.empForm = this.fb.group({
@@ -51,44 +46,31 @@ export class AddEmploye implements OnInit {
     });
   }
 
-  // Convert string "yyyy-MM-dd" to Date object
   private convertToDate(dateString: string): Date | undefined {
     if (!dateString) return undefined;
     const parts = dateString.split('-');
     if (parts.length !== 3) return undefined;
-    const year = parseInt(parts[0], 10);
-    const month = parseInt(parts[1], 10) - 1;
-    const day = parseInt(parts[2], 10);
-    return new Date(year, month, day);
+    return new Date(+parts[0], +parts[1] - 1, +parts[2]);
   }
 
   onImageUpload(event: any) {
-    const files = event.target.files;
-    this.uploadedImages = [];
-    this.imagePreviews = [];
-
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      this.uploadedImages.push(file);
-
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.imagePreviews.push(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
+    const file: File = event.target.files?.[0];
+    if (!file) return;
+    this.currentFile = file;
+    const reader = new FileReader();
+    reader.onload = () => { this.currentPreview = reader.result as string; };
+    reader.readAsDataURL(file);
+    event.target.value = '';
   }
 
-  removeImage(index: number) {
-    this.uploadedImages.splice(index, 1);
-    this.imagePreviews.splice(index, 1);
+  removeImage() {
+    this.currentFile = null;
+    this.currentPreview = null;
   }
 
   triggerFileInput() {
     const fileInput = document.getElementById('imagesInput') as HTMLInputElement;
-    if (fileInput) {
-      fileInput.click();
-    }
+    if (fileInput) fileInput.click();
   }
 
   addEmploye() {
@@ -99,11 +81,7 @@ export class AddEmploye implements OnInit {
 
     const form = this.empForm.value;
     const selectedGrade = this.grades.find(g => g.idGraEmp == form.idGra);
-
-    if (!selectedGrade) {
-      console.error("Grade introuvable !");
-      return;
-    }
+    if (!selectedGrade) return;
 
     const newEmployee: Employees = {
       nomEmploye: form.nomEmploye,
@@ -115,33 +93,27 @@ export class AddEmploye implements OnInit {
       telephone: form.telephone,
       adresse: form.adresse,
       grade: selectedGrade,
-      showDetails: false,
-      imageStr: '',
-      images: []
+      showDetails: false
     };
 
-    this.employeService.ajouterEmp(newEmployee).subscribe({
+this.employeService.ajouterEmp(newEmployee).subscribe({
       next: (savedEmployee) => {
         const idEmp = savedEmployee.idEmploye;
-        if (!idEmp || this.uploadedImages.length === 0) {
-          console.log("Employé ajouté sans image !");
-          this.router.navigate(["/employe"]);
-          return;
+
+        // Upload d'une seule image si elle existe (écrase l'ancienne)
+        if (this.currentFile && idEmp) {
+          this.employeService.uploadImageFS(this.currentFile, this.currentFile.name, idEmp).subscribe({
+            next: () => {
+              // Recharger la page pour voir le nouvel employé
+              window.location.href = '/employe';
+            },
+            error: err => console.error('Erreur upload image:', err)
+          });
+        } else {
+          window.location.href = '/employe';
         }
-
-        const uploads = this.uploadedImages.map(file =>
-          this.employeService.uploadImageProd(file, file.name, idEmp)
-        );
-
-        forkJoin(uploads).subscribe({
-          next: (imgs: Image[]) => {
-            console.log("Employé ajouté avec " + imgs.length + " image(s) !");
-            this.router.navigate(["/employe"]);
-          },
-          error: err => console.error("Erreur upload images employé:", err)
-        });
       },
-      error: err => console.error("Erreur ajout employé:", err)
+      error: err => console.error('Erreur ajout employé:', err)
     });
   }
 }

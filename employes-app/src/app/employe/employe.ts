@@ -4,7 +4,7 @@ import { EmpServices } from '../services/emp-services';
 import { Auth } from '../services/auth';
 import { RouterLink } from '@angular/router';
 import { CommonModule, DatePipe } from '@angular/common';
-import { Image } from '../model/image.model'; // ← AJOUTER
+import { Image } from '../model/image.model';
 
 @Component({
   selector: 'app-employe',
@@ -13,7 +13,7 @@ import { Image } from '../model/image.model'; // ← AJOUTER
   templateUrl: './employe.html',
 })
 export class Employe implements OnInit {
-
+  apiURL: string = 'http://localhost:8081/Employees/api';
   employes!: Employees[];
 
   constructor(
@@ -22,65 +22,61 @@ export class Employe implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.recharger();
+    this.rechargerEMP();
   }
 
-  recharger() {
-    this.employeservice.listerEmp().subscribe({
-      next: (emps) => {
-        this.employes = emps;
-        this.employes.forEach(emp => this.loadPrimaryImage(emp));
-      },
-      error: (err) => console.error('Erreur chargement employés:', err)
+  // recharger() {
+  //   this.employeservice.listerEmp().subscribe({
+  //     next: (emps) => {
+  //       this.employes = emps;
+  //       this.employes.forEach(emp => this.loadPrimaryImage(emp));
+  //     },
+  //     error: (err) => console.error('Erreur chargement employés:', err)
+  //   });
+  // }
+  rechargerEMP(){
+    this.employeservice.listerEmp().subscribe(emps => {
+      this.employes = emps;
     });
-  }
+   }
 
-  private loadPrimaryImage(emp: Employees) {
-    if (emp.idEmploye) {
-      this.employeservice.getImagesByEmp(emp.idEmploye).subscribe({
-        next: (imgs: Image[]) => {
-          if (imgs && imgs.length > 0) {
-            emp.images = imgs;
-            // Afficher SEULEMENT la première image (index 0)
-            this.setImageStr(emp, imgs[0]);
-          } else {
-            this.loadFallbackImage(emp);
-          }
+  // private loadPrimaryImage(emp: Employees) {
+  //   if (!emp.idEmploye) return;
+
+  //   this.employeservice.getImagesByEmp(emp.idEmploye).subscribe({
+  //     next: (imgs: Image[]) => {
+  //       if (imgs && imgs.length > 0) {
+  //         emp.images = imgs;
+  //         emp.imageStr = 'data:' + imgs[0].type + ';base64,' + imgs[0].image;
+  //       }
+  //     },
+  //     error: () => {
+  //       if (emp.image?.idImage) {
+  //         this.employeservice.loadImage(emp.image.idImage).subscribe((img: Image) => {
+  //           emp.imageStr = 'data:' + img.type + ';base64,' + img.image;
+  //         });
+  //       }
+  //     }
+  //   });
+  // }
+
+supprimerEmploye(emp: Employees) {
+    if (confirm('Etes-vous sûr ?') && emp.idEmploye) {
+      // Supprimer d'abord l'image du système de fichiers si elle existe
+      if (emp.imagePath) {
+        this.employeservice.supprimerImageFS(emp.idEmploye).subscribe({
+          next: () => console.log('Image supprimée du dossier'),
+          error: err => console.error('Erreur suppression image:', err)
+        });
+      }
+
+      // Supprimer l'employé
+      this.employeservice.supprimerEmp(emp.idEmploye).subscribe({
+        next: () => {
+          console.log('Employé supprimé');
+          this.rechargerEMP();
         },
-        error: () => this.loadFallbackImage(emp)
-      });
-      return;
-    }
-
-    this.loadFallbackImage(emp);
-  }
-
-  private loadFallbackImage(emp: Employees) {
-    if (emp.images?.length) {
-      this.setImageStr(emp, emp.images[0]);
-    } else if (emp.image?.idImage) {
-      this.employeservice.loadImage(emp.image.idImage).subscribe((img: Image) => {
-        this.setImageStr(emp, img);
-      });
-    } else if (emp.imagePath && emp.idEmploye) {
-      this.employeservice.getImageFS(emp.idEmploye).subscribe(blob => {
-        const reader = new FileReader();
-        reader.onload = () => {
-          emp.imageStr = reader.result as string;
-        };
-        reader.readAsDataURL(blob);
-      });
-    }
-  }
-
-  private setImageStr(emp: Employees, img: Image) {
-    emp.imageStr = 'data:' + img.type + ';base64,' + img.image;
-  }
-
-  supprimerEmploye(emp: Employees) {
-    if (confirm("Etes-vous sûr ?") && emp.idEmploye) {
-      this.employeservice.supprimerEmp(emp.idEmploye).subscribe(() => {
-        this.recharger();
+        error: err => console.error('Erreur suppression employé:', err)
       });
     }
   }

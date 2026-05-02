@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Employees } from '../model/employees.model';
 import { Grade } from '../model/Grade.model';
-import { Image } from '../model/image.model'; // ← AJOUTER
+import { Image } from '../model/image.model';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment.development';
-import { Auth } from './auth';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -17,9 +16,9 @@ const httpOptions = {
 export class EmpServices {
 
   apiURL: string = 'http://localhost:8081/Employees/api/employes';
-  imageURL: string = 'http://localhost:8081/Employees/api/image'; // ← AJOUTER
+  imageURL: string = 'http://localhost:8081/Employees/api/image';
 
-  constructor(private http: HttpClient, private authService: Auth) { }
+  constructor(private http: HttpClient) { }
 
   // ─── EMPLOYÉS ────────────────────────────────────────────
   listerEmp(): Observable<Employees[]> {
@@ -67,42 +66,46 @@ export class EmpServices {
     return this.http.get<Grade>(`${environment.apiGradeURL}/${id}`);
   }
 
-  // ─── IMAGES ──────────────────────────────────────────────
+  // ─── IMAGES (BASE DE DONNÉES - ACTIF) ────────────────────
 
-  // Upload image (stockage en BD)
-  uploadImage(file: File, filename: string): Observable<Image> {
-    const formData = new FormData();
-    formData.append('image', file, filename);
-    return this.http.post<Image>(`${this.imageURL}/upload`, formData);
-  }
-
-  // Charger les détails d'une image (base64)
+  // Charger les détails d'une image depuis la BD (base64)
   loadImage(id: number): Observable<Image> {
     return this.http.get<Image>(`${this.imageURL}/get/info/${id}`);
   }
 
-  // Supprimer une image
+  // Supprimer une image de la BD
   supprimerImage(id: number): Observable<void> {
     return this.http.delete<void>(`${this.imageURL}/delete/${id}`);
   }
+
+  // Upload image dans la BD (plusieurs images par employé)
   uploadImageProd(file: File, filename: string, idEmp: number): Observable<Image> {
     const formData = new FormData();
     formData.append('image', file, filename);
     return this.http.post<Image>(`${this.imageURL}/uploadImageEmp/${idEmp}`, formData);
   }
+
+  // Récupérer toutes les images d'un employé depuis la BD
+  getImagesByEmp(idEmp: number): Observable<Image[]> {
+    return this.http.get<Image[]>(`${this.imageURL}/getImagesByEmp/${idEmp}`);
+  }
+
+  // ─── STOCKAGE SYSTÈME DE FICHIERS (COMMENTÉ) ────────────
+
+  // Upload image dans le dossier home/images (écrase l'ancienne image)
   uploadImageFS(file: File, filename: string, idEmp: number): Observable<any> {
     const formData = new FormData();
     formData.append('image', file, filename);
-    return this.http.post(`${this.imageURL}/uploadFS/${idEmp}`, formData);
+    return this.http.post(`${this.imageURL}/uploadFS/${idEmp}`, formData, { responseType: 'text' });
   }
 
-  // Charger image depuis FileSystem
+  // Charger image depuis le dossier home/images
   getImageFS(id: number): Observable<Blob> {
     return this.http.get(`${this.imageURL}/loadfromFS/${id}`, { responseType: 'blob' });
   }
 
-  // ← Plusieurs images par employé
-  getImagesByEmp(idEmp: number): Observable<Image[]> {
-    return this.http.get<Image[]>(`${this.imageURL}/getImagesByEmp/${idEmp}`);
+  // Supprimer image du système de fichiers (dossier images)
+  supprimerImageFS(idEmp: number): Observable<void> {
+    return this.http.delete<void>(`${this.imageURL}/deleteFS/${idEmp}`);
   }
 }

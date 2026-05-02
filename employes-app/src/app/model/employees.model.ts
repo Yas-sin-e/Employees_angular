@@ -13,8 +13,8 @@ export class Employees {
   adresse?: string;
   grade!: Grade;
   showDetails!: boolean;
-  image?: Image;
-  imageStr?: string;
+  image?: Image;//ca sera pour stocker l'image de l'employé pour l'afficher dans les détails de l'employé
+  imageStr?: string;//ca sera pour stocker l'image en base64 pour l'afficher dans la liste des employés et dans les détails de l'employé str c'est a dire string de l'image
   images?: Image[];
   imagePath?: string;
 }

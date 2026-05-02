@@ -83,72 +83,40 @@
         class="text-danger">Grade obligatoire</span>
     </div>
 
-    <!-- ← Image Management Section -->
-    <div class="form-group image-section">
+    <!-- Section Image -->
+    <div class="form-group mt-3">
       <label><strong>Image :</strong></label>
 
-      <!-- Large Image Preview Area -->
-      <div class="image-preview-area">
-        @if (imagePreviews.length > 0) {
-        <img [src]="imagePreviews[0]" alt="Aperçu image" class="preview-image">
-        } @else if (currentEmploye.images && currentEmploye.images.length > 0) {
-        <img [src]="'data:' + currentEmploye.images[0].type + ';base64,' + currentEmploye.images[0].image"
-          alt="Image actuelle" class="preview-image">
-        } @else {
-        <div class="empty-preview">Aucune image sélectionnée</div>
-        }
+      <!-- Input file caché -->
+      <input id="imagesInput" type="file" accept="image/*" (change)="onImageUpload($event)" style="display:none;">
+
+      <!-- Bouton pour ouvrir le sélecteur -->
+      <div class="mt-2">
+        <button type="button" (click)="triggerFileInput()" class="btn btn-primary">
+          Choisir une image
+        </button>
       </div>
 
-      <!-- Status des fichiers sélectionnés -->
-      <div class="file-chooser-wrapper">
-        <span class="file-status">
-          @if (uploadedImages.length > 0) {
-          {{ uploadedImages.length }} fichier(s) sélectionné(s)
-          } @else {
-          Aucun fichier choisi
-          }
-        </span>
-      </div>
-      <!-- Hidden file input - triggers only when triggerFileInput() is called -->
-      <input id="imageInput" type="file" multiple accept="image/*" (change)="onImageUpload($event)"
-        style="display: none;">
-
-      <!-- Bouton pour OUVRIR le sélecteur de fichiers -->
-      <button type="button" (click)="triggerFileInput()" class="btn btn-primary mt-2">
-        Sélectionner des images
-      </button>
-
-      <!-- Bouton pour UPLOADER les images vers le serveur -->
-      <button type="button" (click)="onAddImageEmploye()" class="btn btn-success mt-2"
-        [disabled]="uploadedImages.length === 0">
-        Uploader les images
-      </button>
-
-      <!-- Images Gallery -->
-      @if (imagePreviews.length > 0 || (currentEmploye.images && currentEmploye.images.length > 0)) {
-      <div class="images-section">
-        <h5 class="images-title">Images</h5>
-        <div class="images-gallery-card">
-          <div class="gallery-content">
-            @for (img of imagePreviews; track $index) {
-            <div class="image-thumb-wrapper">
-              <img [src]="img" alt="Image {{ $index + 1 }}" class="image-thumb">
-              <button type="button" (click)="removeImage($index)" class="btn btn-delete-image">
-                Supprimer
-              </button>
-            </div>
-            }
-            @for (img of currentEmploye.images; track img.idImage) {
-            <div class="image-thumb-wrapper">
-              <img [src]="'data:' + img.type + ';base64,' + img.image" alt="Image de {{ currentEmploye.nomEmploye }}"
-                class="image-thumb">
-              <button type="button" (click)="deleteExistingImage(img)" class="btn btn-danger btn-sm">
-                Supprimer
-              </button>
-            </div>
-            }
-          </div>
+      <!-- Zone de prévisualisation de l'image (une seule) -->
+      @if (currentPreview) {
+      <div class="mt-3 p-3 border rounded" style="background-color: #f8f9fa;">
+        <h6>Aperçu :</h6>
+        <img [src]="currentPreview" style="max-width: 300px; max-height: 200px; object-fit: contain;"
+          class="img-thumbnail">
+        <div class="mt-2">
+          <button type="button" (click)="removeImage()" class="btn btn-danger">
+            Supprimer
+          </button>
         </div>
+      </div>
+      }
+
+      <!-- Image existante -->
+      @if (!currentPreview && existingImageUrl) {
+      <div class="mt-3 p-3 border rounded" style="background-color: #f8f9fa;">
+        <h6>Image actuelle :</h6>
+        <img [src]="existingImageUrl" style="max-width: 300px; max-height: 200px; object-fit: contain;"
+          class="img-thumbnail">
       </div>
       }
     </div>
